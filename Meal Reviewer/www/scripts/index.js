@@ -288,6 +288,7 @@ $(document).on("pagebeforehide", "#compassHome", function () {
     navigator.compass.clearWatch(watchID);
 });
 
+// Kontaktseite laden
 $(document).on("pageinit", "#contactsHome", function () {
     var contactOptions = new ContactFindOptions();
     contactOptions.filter = "";
@@ -295,15 +296,20 @@ $(document).on("pageinit", "#contactsHome", function () {
     var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
     navigator.contacts.find(fields, onContactSuccess, onContactError, contactOptions);
 
-
     function onContactSuccess(contacts) {
         console.log("Found " + contacts.length + "Contacts");
+
+        var number;
         for (var i = 0; i < contacts.length; i++) {
-            $("#contact-data").append("<li><h1>" + contacts[i].name.formatted + "</h1></li>");
+            console.log(JSON.stringify(contacts[i]));
+            if (contacts[i].phoneNumbers != null) {
+                number = contacts[i].phoneNumbers[0].value
+                $("#contact-data").append("<li data-icon='false'><a href='tel:" + number + "'<h1>" + contacts[i].name.formatted + "</h1><p>" + number + "</p></a>");
+            }
         }
         $("#contact-data").listview("refresh");
+        $.mobile.loading("hide");
     }
-
     function onContactError() {
         alert("Some Error Occured");
     }
@@ -420,6 +426,3 @@ $(document).on("pageinit", "#mediaHome", function () {
     */
 
 });
-
-
-
