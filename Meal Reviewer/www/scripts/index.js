@@ -199,6 +199,10 @@ $(document).on("pageinit", "#stuffHome", function () {
     document.addEventListener("volumeupbutton", onVolumeUpKeyDown, false); // Lautstärker lauter-Button
     window.addEventListener("batterystatus", onBatteryStatus, false); // Batterie + Ladezustand 
 
+    document.getElementById("btnDeviceInfo").onclick = function () {
+        alert("Running Cordova version: " + device.cordova + "\nDevice Model: " + device.model + "\nDevice Platform: " + device.platform + " " + device.version + "\nDevice UUI: " + device.uuid);
+    }
+
     // Batteriestatus aktualisieren. Wird ausgelöst sobald sich der LAdezustand um mind. 1% ändert oder das Ladekabel an- oder abgesteckt wird
     function onBatteryStatus(info) {
         var status;
