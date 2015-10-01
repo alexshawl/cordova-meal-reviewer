@@ -1,5 +1,4 @@
-﻿// TODO: Speicherlogik nutzen wie in http://jsfiddle.net/dmftLt40/ oder besser employee beispiel
-// location fertig machen
+﻿// TODO: MEDIASCHEISSE
 
 
 var destinationType;
@@ -288,4 +287,139 @@ $(document).on("pagebeforeshow", "#compassHome", function () {
 $(document).on("pagebeforehide", "#compassHome", function () {
     navigator.compass.clearWatch(watchID);
 });
+
+$(document).on("pageinit", "#contactsHome", function () {
+    var contactOptions = new ContactFindOptions();
+    contactOptions.filter = "";
+    contactOptions.multiple = true;
+    var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
+    navigator.contacts.find(fields, onContactSuccess, onContactError, contactOptions);
+
+
+    function onContactSuccess(contacts) {
+        console.log("Found " + contacts.length + "Contacts");
+        for (var i = 0; i < contacts.length; i++) {
+            $("#contact-data").append("<li><h1>" + contacts[i].name.formatted + "</h1></li>");
+        }
+        $("#contact-data").listview("refresh");
+    }
+
+    function onContactError() {
+        alert("Some Error Occured");
+    }
+});
+
+$(document).on("pageinit", "#mediaHome", function () {
+    var pathToFile;
+    document.getElementById("startRecord").onclick = function () {
+        // start audio capture
+        navigator.device.capture.captureAudio(captureSuccess, captureError, { limit: 1 });
+    }
+    document.getElementById("stopRecord").onclick = function () {
+        playAudio("file:///storage/emulated/0/Sounds/Sprachmemo%20017.m4a");
+    }
+
+
+
+    // capture callback
+    var captureSuccess = function (mediaFiles) {
+        var i, len, krasserPfad;
+        for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+            krasserPfad = mediaFiles[i].fullPath
+            // do something interesting with the file
+            playAudio("file:///" + krasserPfad.substr(6, path.length));
+            /*
+            console.log("fullPath " + mediaFiles[i].fullPath);
+            console.log("KrasserPfad vor umwandeln : " + krasserPfad);
+            krasserPfad = krasserPfad.substr(6, path.length);
+            console.log("krasserPfad gekürzt " + krasserPfad);
+            krasserPfad = "file:///" + krasserPfad;
+            console.log("krasserPfad fertig" + krasserPfad);
+
+            //    alert("new play try");
+            //    playAudio(pathToFile);
+            //   alert("Should have 2played");
+            */
+        };
+    };
+
+    // capture error callback
+    var captureError = function (error) {
+        alert('Error code: ' + error.code, null, 'Capture Error');
+    };
+
+
+    // Play audio
+    //
+    function playAudio(url) {
+        // Play the audio file at url
+        console.log("Audi File bei playAudio() angekommen -> " + url);
+        var my_media = new Media(url,
+            // success callback
+            function () {
+                console.log("playAudio():Audio Success");
+            },
+            // error callback
+            function (err) {
+                console.log("playAudio():Audio Error: " + err.message);
+            }
+        );
+        // Play audio
+        my_media.play();
+    }
+
+
+
+
+
+
+
+
+
+    /*
+
+    var mediaRec;
+    document.getElementById("startRecord").onclick = function () {
+        recordAudio();
+    }
+    document.getElementById("stopRecord").onclick = function () {
+        mediaRec.stopRecord();
+        alert("wird jetzt abgspielt");
+        mediaRec.play();
+    }
+
+        function getPhoneGapPath() {
+
+        var path = window.location.pathname;
+        path = path.substr(path, path.length - 10);
+
+        return 'file:/' + path;
+    };
+
+
+    // Record audio
+    //
+    function recordAudio() {
+        var src = getPhoneGapPath() + "/myrecording.mp3";
+        console.log("PhoneGapPath generated -> " + src);
+        mediaRec = new Media(src,
+            // success callback
+            function () {
+                alert("recordAudio():Audio Success");
+                console.log("aufnahme erfolgreich. Dauer:  " + mediaRec.getDuration());
+            },
+
+            // error callback
+            function (err) {
+                alert("recordAudio():Audio Error: " + err.message);
+            });
+
+        // Record audio
+        mediaRec.startRecord();
+    };
+    */
+
+});
+
+
 
