@@ -192,6 +192,7 @@ function drawMap(latlng) {
 Initialisierung der Device-Test Seite
 */
 $(document).on("pageinit", "#stuffHome", function () {
+    var watchId;
     // Eventlistener für Tasten des Geräts
     document.addEventListener("backbutton", onBackKeyDown, false); // Zurück-Button
     document.addEventListener("menubutton", onMenuKeyDown, false); // Menü-Button
@@ -229,19 +230,10 @@ $(document).on("pageinit", "#stuffHome", function () {
     function onMenuKeyDown() {
         alert("Menu key pressed");
     }
-
     // Anzeigen, ob der zurück-Knopf auf dem Gerät gedrückt wurde
     function onBackKeyDown() {
         alert("Back button pressed");
     }
-
-    // Erkennen, ob das Gerät geschüttelt wurde
-    var onShake = function () {
-        alert("Device has been shaken");
-        shake.stopWatch();
-    };
-    shake.startWatch(onShake, 30);
-
     // Verbindungsstatus anzeigen
     function checkConnection() {
         var networkState = navigator.connection.type; // Netzwerkstatus abrufen
@@ -260,3 +252,40 @@ $(document).on("pageinit", "#stuffHome", function () {
     }
     checkConnection();
 });
+
+// Shake-Funktionen laden
+$(document).on("pagebeforeshow", "#shakeHome", function () {
+    // Erkennen, ob das Gerät geschüttelt wurde
+    var onShake = function () {
+        alert("Device has been shaken");
+    };
+    shake.startWatch(onShake, 30);
+});
+// Shake-Funktionen stoppen
+$(document).on("pagebeforehide", "#shakeHome", function () {
+    shake.stopWatch();
+});
+
+// Compass Funktion starten
+$(document).on("pagebeforeshow", "#compassHome", function () {
+    function onCompassSuccess(heading) {
+        var element = document.getElementById('heading');
+        element.innerHTML = 'Heading: ' + heading.magneticHeading;
+    };
+
+    function onCompassError(compassError) {
+        alert('Compass error: ' + compassError.code);
+    };
+
+    var compassOptions = {
+        frequency: 1000
+    }; // Jede Sekunde aktualisieren
+
+    watchID = navigator.compass.watchHeading(onCompassSuccess, onCompassError, compassOptions);
+});
+
+//Compass Funktion stoppen
+$(document).on("pagebeforehide", "#compassHome", function () {
+    navigator.compass.clearWatch(watchID);
+});
+
