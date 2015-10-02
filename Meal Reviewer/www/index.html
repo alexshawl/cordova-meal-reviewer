@@ -1,10 +1,180 @@
-﻿<!doctype html>
+﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>tittle</title>
-    <script>
-        window.location = './main.html';
-    </script>
-    <body>
-    </body>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <title>Cordova Prototype</title>
+    <!-- MealReviewerFinal-Verweise -->
+    <link href="css/index.css" rel="stylesheet">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script src="lib/jquery.min.js"></script>
+    <script src="lib/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+    <!-- Meal Reviewer Home View -->
+    <div data-role="page" id="mealHome">
+        <div data-role="navbar" data-iconpos="left">
+            <ul>
+                <li><a href="#mealHome" data-icon="home" class="ui-btn-active">Meal Reviewer</a></li>
+                <li><a href="#stuffHome" data-icon="gear">Device Tester</a></li>
+                <li><a onclick="navigator.app.exitApp()" data-icon="delete">Exit App</a></li>
+            </ul>
+        </div>
+        <div data-role="header">
+            <h1>Meal Reviewer</h1>
+        </div>
+        <div data-role="content">
+            <form>
+                <input id="restaurantfilter" data-type="search" placeholder="Search for a restaurant...">
+            </form>
+            <ul data-role="listview" data-inset="true" data-filter="true" data-input="#restaurantfilter">
+                <li><a href="#restaurant" data-transition="slide">Example Restaurant</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- Restaurant View -->
+    <div data-role="page" id="restaurant" data-theme="a">
+        <div data-role="header">
+            <a href='#mealHome' class='ui-btn-left' data-transition='slide' data-direction='reverse'>Back</a>
+            <h1>Restaurant Details</h1>
+        </div>
+        <div data-role="content">
+            <div>
+                <ul data-role="listview" id="restaurant-data">
+                    <img id="restaurantPhoto" src="" style="float:left;margin:10px;width:25%;" />
+                    <li><b>Example Restaurant</b></li>
+                    <li><span id="locationLong">Location Longitude:</span></li>
+                    <li><span id="locationLat">Location Latitude:</span></li>
+                </ul>
+            </div>
+            <a class="ui-btn ui-icon-navigation" id="btnShowMap" href="#map-page" data-transition="slide">Show on Map</a>
+            <button class="ui-btn ui-icon-location ui-btn-icon-left" id="btnUpdateLocation">Update to current Location</button>
+            <button class="ui-btn ui-icon-delete ui-btn-icon-left" id="btnDelLocation">Delete Location</button>
+            <button class="ui-btn ui-icon-camera ui-btn-icon-left" id="btnTakePhoto">Take new Photo</button>
+            <button class="ui-btn ui-icon-delete ui-btn-icon-left" id="btnDelPhoto">Delete Photo</button>
+            <div class="ui-bar ui-bar-a">
+                <h4>Available Meals:</h4>
+            </div>
+            <form>
+                <input id="filter-for-listview" data-type="search" placeholder="Search for a meal...">
+            </form>
+            <ul data-role="listview" data-inset="true" data-filter="true" data-input="#filter-for-listview">
+                <li><a href="#meal" data-transition="slide"><img src="images/currywurst.jpeg" /><h3>Currywurst mit Pommes</h3><p>4/5</p></a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- Meal view-->
+    <div data-role="page" id="meal" data-theme="a">
+        <div data-role="header">
+            <a href='#mealHome' class='ui-btn-left' data-transition='slide' data-direction='reverse'>Back</a>
+            <h1>Meal Details</h1>
+        </div>
+        <div data-role="content">
+            <ul data-role="listview" id="meal-data">
+                <li><img src="images/currywurst.jpeg" /></li>
+                <li><b>Currywurst mit Pommes</b></li>
+                <li><b>Rating: </b>4/5</li>
+            </ul>
+        </div>
+    </div>
+    <!-- Google Maps View-->
+    <div data-role="page" id="map-page" data-url="map-page">
+        <div data-role="header">
+            <a href='#restaurant' class='ui-btn-left' data-transition='slide' data-direction='reverse'>Back</a>
+            <h1>Restaurant Location</h1>
+        </div>
+        <span id="locErrArea"></span>
+        <div role="main" class="ui-content" id="map-canvas">
+            <!-- map loads here... -->
+        </div>
+    </div>
+    <!-- More Stuff Home View-->
+    <div data-role="page" id="stuffHome" data-theme="a">
+        <div data-role="navbar" data-iconpos="left">
+            <ul>
+                <li><a href="#mealHome" data-icon="home">Meal Reviewer</a></li>
+                <li><a href="#stuffHome" data-icon="gear" class="ui-btn-active">Device Tester</a></li>
+                <li><a onclick="navigator.app.exitApp()" data-icon="delete">Exit App</a></li>
+            </ul>
+        </div>
+        <div data-role="header">
+            <h1>Device Tester</h1>
+        </div>
+        <div data-role="content">
+            <div class="ui-bar ui-bar-a">
+                <h4>Battery Status</h4>
+            </div>
+            <label id="pluggedStatus"></label>
+            <div class="ui-bar ui-bar-a">
+                <h4>Network Status</h4>
+            </div>
+            <label id="networkStatus"></label>
+            <div class="ui-bar ui-bar-a">
+                <h4>Move Volumebuttons to slide</h4>
+            </div>
+            <form>
+                <input type="range" name="slider-2" id="slider-2" data-highlight="true" min="0" max="1" step="1" value="1">
+            </form>
+            <a class="ui-btn" id="btnShowShakeTest" href="#shakeHome" data-transition="slide">Shake Test</a>
+            <a class="ui-btn" id="btnShowMediaTest" href="#mediaHome" data-transition="slide">Media Test </a>
+            <a class="ui-btn" id="btnShowCompassTest" href="#compassHome" data-transition="slide">Orientation/Compass Test </a>
+            <a class="ui-btn" id="btnShowContactList" href="#contactsHome" data-transition="slide">Contact List </a>
+            <button class="ui-btn ui-btn-icon-left" id="btnVibrateTest">Test Vibration</button>
+            <button class="ui-btn ui-btn-icon-left" id="btnDeviceInfo">Display Device Info</button>
+        </div>
+    </div>
+    <!-- Shake Test Page-->
+    <div data-role="page" id="shakeHome" data-theme="a">
+        <div data-role="header">
+            <a href='#stuffHome' class='ui-btn-left' data-transition='slide' data-direction='reverse'>Back</a>
+            <h1>Shake Tester</h1>
+        </div>
+        <div data-role="content">
+            <center><h4>Shake the device!</h4></center>
+        </div>
+    </div>
+    <!-- Media Test Page-->
+    <div data-role="page" id="mediaHome" data-theme="a">
+        <div data-role="header">
+            <a href='#stuffHome' class='ui-btn-left' data-transition='slide' data-direction='reverse'>Back</a>
+            <h1>Media Test</h1>
+        </div>
+        <div data-role="content">
+            <label>Pressing the <b>Record Audio</b> Button will start the native Audio Recorder of the device. After a sucuessfull record, close the Audio Recorder. To play the record file, press the <b>Play recent Audio</b> Button.</label>
+            <button class="ui-btn ui-btn-icon-left" id="startRecord">Record Audio</button>
+            <button class="ui-btn ui-btn-icon-left" id="playAudio">Play recent Audio</button>
+        </div>
+    </div>
+
+    <!-- Compass Page-->
+    <div data-role="page" id="compassHome" data-theme="a">
+        <div data-role="header">
+            <a href='#stuffHome' id="backFromCompass" class='ui-btn-left' data-transition='slide' data-direction='reverse'>Back</a>
+            <h1>Compass Tester</h1>
+        </div>
+        <div data-role="content">
+            <center><h4 id="heading"></h4></center>
+        </div>
+    </div>
+
+    <!-- Contacts Page-->
+    <div data-role="page" id="contactsHome" data-theme="a">
+        <div data-role="header">
+            <a href='#stuffHome' id="backFromContacts" class='ui-btn-left' data-transition='slide' data-direction='reverse'>Back</a>
+            <h1>Contact List</h1>
+        </div>
+        <div data-role="content">
+            <form>
+                <input id="contactfilter" data-type="search" placeholder="Search for a contact...">
+            </form>
+            <ul data-role="listview" id="contact-data" data-inset="true" data-filter="true" data-input="#contactfilter"></ul>
+        </div>
+    </div>
+    <!-- Cordova-Verweis, wird Ihrer App beim Erstellen hinzugefügt. -->
+    <script src="cordova.js"></script>
+    <script src="scripts/platformOverrides.js"></script>
+    <script src="scripts/index.js"></script>
+</body>
 </html>
