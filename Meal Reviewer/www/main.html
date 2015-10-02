@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
     <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no' />
-    <title>MealReviewerFinal</title>
+    <title>Cordova Prototype</title>
     <!-- MealReviewerFinal-Verweise -->
     <link href="css/index.css" rel="stylesheet">
     <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet">
@@ -19,7 +19,7 @@
             <ul>
                 <li><a href="#mealHome" data-icon="home" class="ui-btn-active">Meal Reviewer</a></li>
                 <li><a href="#stuffHome" data-icon="gear">Device Tester</a></li>
-                <li><a onclick="navigator.app.exitApp()" data-icon="delete">Close App</a></li>
+                <li><a onclick="navigator.app.exitApp()" data-icon="delete">Exit App</a></li>
             </ul>
         </div>
         <div data-role="header">
@@ -30,7 +30,7 @@
                 <input id="restaurantfilter" data-type="search" placeholder="Search for a restaurant...">
             </form>
             <ul data-role="listview" data-inset="true" data-filter="true" data-input="#restaurantfilter">
-                <li><a href="#restaurant" data-transition="slide">ZF Casino Werk 1</a></li>
+                <li><a href="#restaurant" data-transition="slide">Example Restaurant</a></li>
             </ul>
         </div>
     </div>
@@ -44,15 +44,15 @@
             <div>
                 <ul data-role="listview" id="restaurant-data">
                     <img id="restaurantPhoto" src="" style="float:left;margin:10px;width:25%;" />
-                    <li>ZF Casino Werk 1</li>
+                    <li><b>Example Restaurant</b></li>
                     <li><span id="locationLong">Location Longitude:</span></li>
                     <li><span id="locationLat">Location Latitude:</span></li>
                 </ul>
             </div>
             <a class="ui-btn ui-icon-navigation" id="btnShowMap" href="#map-page" data-transition="slide">Show on Map</a>
-            <button class="ui-btn ui-icon-location ui-btn-icon-left" id="btnUpdateLocation">Update Location</button>
+            <button class="ui-btn ui-icon-location ui-btn-icon-left" id="btnUpdateLocation">Update to current Location</button>
             <button class="ui-btn ui-icon-delete ui-btn-icon-left" id="btnDelLocation">Delete Location</button>
-            <button class="ui-btn ui-icon-camera ui-btn-icon-left" id="btnTakePhoto">Change Photo</button>
+            <button class="ui-btn ui-icon-camera ui-btn-icon-left" id="btnTakePhoto">Take new Photo</button>
             <button class="ui-btn ui-icon-delete ui-btn-icon-left" id="btnDelPhoto">Delete Photo</button>
             <div class="ui-bar ui-bar-a">
                 <h4>Available Meals:</h4>
@@ -73,7 +73,9 @@
         </div>
         <div data-role="content">
             <ul data-role="listview" id="meal-data">
-                <li>ZF Casino Werk 1</li>
+                <li><img src="images/currywurst.jpeg" /></li>
+                <li><b>Currywurst mit Pommes</b></li>
+                <li><b>Rating: </b>4/5</li>
             </ul>
         </div>
     </div>
@@ -94,7 +96,7 @@
             <ul>
                 <li><a href="#mealHome" data-icon="home">Meal Reviewer</a></li>
                 <li><a href="#stuffHome" data-icon="gear" class="ui-btn-active">Device Tester</a></li>
-                <li><a onclick="navigator.app.exitApp()" data-icon="delete">Close App</a></li>
+                <li><a onclick="navigator.app.exitApp()" data-icon="delete">Exit App</a></li>
             </ul>
         </div>
         <div data-role="header">
@@ -116,11 +118,11 @@
                 <input type="range" name="slider-2" id="slider-2" data-highlight="true" min="0" max="1" step="1" value="1">
             </form>
             <a class="ui-btn" id="btnShowShakeTest" href="#shakeHome" data-transition="slide">Shake Test</a>
-            <a class="ui-btn" id="btnShowMediaTest" href="#mediaHome" data-transition="slide">Media/Sound Test </a>
+            <a class="ui-btn" id="btnShowMediaTest" href="#mediaHome" data-transition="slide">Media Test </a>
             <a class="ui-btn" id="btnShowCompassTest" href="#compassHome" data-transition="slide">Orientation/Compass Test </a>
             <a class="ui-btn" id="btnShowContactList" href="#contactsHome" data-transition="slide">Contact List </a>
             <button class="ui-btn ui-btn-icon-left" id="btnVibrateTest">Test Vibration</button>
-            <button class="ui-btn ui-btn-icon-left" id="btnDeviceInfo">Device Info</button>
+            <button class="ui-btn ui-btn-icon-left" id="btnDeviceInfo">Display Device Info</button>
         </div>
     </div>
     <!-- Shake Test Page-->
@@ -137,11 +139,11 @@
     <div data-role="page" id="mediaHome" data-theme="a">
         <div data-role="header">
             <a href='#stuffHome' class='ui-btn-left' data-transition='slide' data-direction='reverse'>Back</a>
-            <h1>Media Tester</h1>
+            <h1>Media Test</h1>
         </div>
         <div data-role="content">
             <button class="ui-btn ui-btn-icon-left" id="startRecord">Record Audio</button>
-            <button class="ui-btn ui-btn-icon-left" id="stopRecord">Stop Recording</button>
+            <button class="ui-btn ui-btn-icon-left" id="playAudio">Play recent Audio</button>
         </div>
     </div>
 

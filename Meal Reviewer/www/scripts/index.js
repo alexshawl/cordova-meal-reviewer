@@ -1,7 +1,4 @@
-﻿// TODO: MEDIASCHEISSE
-
-
-var destinationType;
+﻿var destinationType;
 
 (function () {
     "use strict";
@@ -45,7 +42,6 @@ var destinationType;
 
         // Defice Test: Button Vibrationstest
         document.getElementById("btnVibrateTest").onclick = function () {
-            alert("Vibration clicked");
             navigator.vibrate(3000);
         };
     };
@@ -87,8 +83,8 @@ var destinationType;
     function updateLocation() {
         navigator.geolocation.getCurrentPosition(
             function (position) {
-                localStorage.setItem("locLat1", position.coords.latitude);
-                localStorage.setItem("locLong1", position.coords.longitude);
+                localStorage.setItem("locLat1", position.coords.latitude); // Latitude speichern
+                localStorage.setItem("locLong1", position.coords.longitude); // Longitude speichern
                 refreshLocation(); // Anzeige der Location neu laden
             },
             function (error) {
@@ -107,6 +103,15 @@ var destinationType;
     };
 })();
 
+
+/**
+Bei Initialisierung der Restaurant-Detailseite gespeichertes Bild und Location laden.
+*/
+$(document).on("pageinit", "#restaurant", function () {
+    refreshPhoto();
+    refreshLocation();
+});
+
 /**
 Aktualisiert das Foto in der App
 */
@@ -121,14 +126,6 @@ function refreshPhoto() {
         currentPhoto.src = "images/noimage.gif"
     }
 };
-
-/**
-Bei Initialisierung der Restaurant-Detailseite gespeichertes Bild und Location laden.
-*/
-$(document).on("pageinit", "#restaurant", function () {
-    refreshPhoto();
-    refreshLocation();
-});
 
 /**
 Aktualisiert die Geolocation Anzeige in der App.
@@ -176,9 +173,7 @@ function drawMap(latlng) {
         center: latlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
-
     var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
-
     // Pin sitzen
     var marker = new google.maps.Marker({
         position: latlng,
@@ -198,12 +193,11 @@ $(document).on("pageinit", "#stuffHome", function () {
     document.addEventListener("volumedownbutton", onVolumeDownKeyDown, false); // Lautstärke leiser-Button
     document.addEventListener("volumeupbutton", onVolumeUpKeyDown, false); // Lautstärker lauter-Button
     window.addEventListener("batterystatus", onBatteryStatus, false); // Batterie + Ladezustand 
-
-    document.getElementById("btnDeviceInfo").onclick = function () {
-        alert("Running Cordova version: " + device.cordova + "\nDevice Model: " + device.model + "\nDevice Platform: " + device.platform + " " + device.version + "\nDevice UUI: " + device.uuid);
+    document.getElementById("btnDeviceInfo").onclick = function () { // Device Info anzeigen
+        navigator.notification.alert("Running Cordova version: " + device.cordova + "\nDevice Model: " + device.model + "\nDevice Platform: " + device.platform + " " + device.version + "\nDevice UUI: " + device.uuid, null, "Device Info");
     }
 
-    // Batteriestatus aktualisieren. Wird ausgelöst sobald sich der LAdezustand um mind. 1% ändert oder das Ladekabel an- oder abgesteckt wird
+    // Batteriestatus aktualisieren. Wird ausgelöst sobald sich der Ladezustand um mind. 1% ändert oder das Ladekabel an- oder abgesteckt wird
     function onBatteryStatus(info) {
         var status;
         status = "The Battery Level is <b>" + info.level + "</b>% and the cable is <b>";
@@ -256,10 +250,11 @@ $(document).on("pageinit", "#stuffHome", function () {
 $(document).on("pagebeforeshow", "#shakeHome", function () {
     // Erkennen, ob das Gerät geschüttelt wurde
     var onShake = function () {
-        alert("Device has been shaken");
+        navigator.notification.alert("Device has been shaken", null, "Shake success");
     };
     shake.startWatch(onShake, 30);
 });
+
 // Shake-Funktionen stoppen
 $(document).on("pagebeforehide", "#shakeHome", function () {
     shake.stopWatch();
@@ -315,37 +310,26 @@ $(document).on("pageinit", "#contactsHome", function () {
     }
 });
 
+/*
+Initialisierung der Media-Test Seite
+*/
 $(document).on("pageinit", "#mediaHome", function () {
-    var pathToFile;
+    var pathToFile; // Pfad für Audi-File
+    // Play Audio Button
+    document.getElementById("playAudio").onclick = function () {
+        playAudio(pathToFile);
+    };
+    // Record Button
     document.getElementById("startRecord").onclick = function () {
-        // start audio capture
-        navigator.device.capture.captureAudio(captureSuccess, captureError, { limit: 1 });
-    }
-    document.getElementById("stopRecord").onclick = function () {
-        playAudio("file:///storage/emulated/0/Sounds/Sprachmemo%20017.m4a");
-    }
-
-
-
+        navigator.device.capture.captureAudio(captureSuccess, captureError, { limit: 1 }); // Nativen Audiorekorder starten
+    };
     // capture callback
     var captureSuccess = function (mediaFiles) {
-        var i, len, krasserPfad;
+        var i, len;
         for (i = 0, len = mediaFiles.length; i < len; i += 1) {
-            krasserPfad = mediaFiles[i].fullPath
-            // do something interesting with the file
-            playAudio("file:///" + krasserPfad.substr(6, path.length));
-            /*
-            console.log("fullPath " + mediaFiles[i].fullPath);
-            console.log("KrasserPfad vor umwandeln : " + krasserPfad);
-            krasserPfad = krasserPfad.substr(6, path.length);
-            console.log("krasserPfad gekürzt " + krasserPfad);
-            krasserPfad = "file:///" + krasserPfad;
-            console.log("krasserPfad fertig" + krasserPfad);
-
-            //    alert("new play try");
-            //    playAudio(pathToFile);
-            //   alert("Should have 2played");
-            */
+            pathToFile = mediaFiles[i].fullPath;
+            pathToFile = pathToFile.substr(6, pathToFile.length);
+            pathToFile = "file:///" + pathToFile;
         };
     };
 
@@ -356,11 +340,9 @@ $(document).on("pageinit", "#mediaHome", function () {
 
 
     // Play audio
-    //
     function playAudio(url) {
         // Play the audio file at url
-        console.log("Audi File bei playAudio() angekommen -> " + url);
-        var my_media = new Media(url,
+        var audioFile = new Media(url,
             // success callback
             function () {
                 console.log("playAudio():Audio Success");
@@ -371,58 +353,6 @@ $(document).on("pageinit", "#mediaHome", function () {
             }
         );
         // Play audio
-        my_media.play();
+        audioFile.play();
     }
-
-
-
-
-
-
-
-
-
-    /*
-
-    var mediaRec;
-    document.getElementById("startRecord").onclick = function () {
-        recordAudio();
-    }
-    document.getElementById("stopRecord").onclick = function () {
-        mediaRec.stopRecord();
-        alert("wird jetzt abgspielt");
-        mediaRec.play();
-    }
-
-        function getPhoneGapPath() {
-
-        var path = window.location.pathname;
-        path = path.substr(path, path.length - 10);
-
-        return 'file:/' + path;
-    };
-
-
-    // Record audio
-    //
-    function recordAudio() {
-        var src = getPhoneGapPath() + "/myrecording.mp3";
-        console.log("PhoneGapPath generated -> " + src);
-        mediaRec = new Media(src,
-            // success callback
-            function () {
-                alert("recordAudio():Audio Success");
-                console.log("aufnahme erfolgreich. Dauer:  " + mediaRec.getDuration());
-            },
-
-            // error callback
-            function (err) {
-                alert("recordAudio():Audio Error: " + err.message);
-            });
-
-        // Record audio
-        mediaRec.startRecord();
-    };
-    */
-
 });
