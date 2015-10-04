@@ -40,10 +40,12 @@
             displayRestaurantMap();
         };
 
-        // Defice Test: Button Vibrationstest
+        // Device Test: Button Vibrationstest
         document.getElementById("btnVibrateTest").onclick = function () {
             navigator.vibrate(3000);
         };
+
+        navigator.splashscreen.hide();
     };
 
     /**
@@ -248,9 +250,19 @@ $(document).on("pageinit", "#stuffHome", function () {
 
 // Shake-Funktionen laden
 $(document).on("pagebeforeshow", "#shakeHome", function () {
+    var accelX, accelY, accelZ, time;
     // Erkennen, ob das Gerät geschüttelt wurde
     var onShake = function () {
-        navigator.notification.alert("Device has been shaken", null, "Shake success");
+        navigator.accelerometer.getCurrentAcceleration(function (acceleration) {
+            accelX = acceleration.x;
+            accelY = acceleration.y;
+            accelZ = acceleration.z;
+            time = acceleration.timestamp;
+            navigator.notification.alert("Device has been shaken!\nAcceleration Data:\nAcceleration X: " + accelX + "\nAcceleration Y: " + accelY + "\nAcceleration Z: " + accelZ + "\nTimestamp: " + time, null, "Shake success");
+        }, function () {
+            alert("Accelerometer Error ");
+        });
+
     };
     shake.startWatch(onShake, 30);
 });
@@ -296,14 +308,13 @@ $(document).on("pageinit", "#contactsHome", function () {
 
         var number;
         for (var i = 0; i < contacts.length; i++) {
-            console.log(JSON.stringify(contacts[i]));
+            // console.log(JSON.stringify(contacts[i]));
             if (contacts[i].phoneNumbers != null) {
-                number = contacts[i].phoneNumbers[0].value
+                number = contacts[i].phoneNumbers[0].value;
                 $("#contact-data").append("<li data-icon='false'><a href='tel:" + number + "'<h1>" + contacts[i].name.formatted + "</h1><p>" + number + "</p></a>");
             }
         }
         $("#contact-data").listview("refresh");
-        $.mobile.loading("hide");
     }
     function onContactError() {
         alert("Some Error Occured");
