@@ -65,9 +65,6 @@
         "cordova-plugin-shake": {
             "PACKAGE_NAME": "de.hsweingarten.schaalal"
         },
-        "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "de.hsweingarten.schaalal"
-        },
         "cordova-plugin-vibration": {
             "PACKAGE_NAME": "de.hsweingarten.schaalal"
         },

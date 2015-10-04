@@ -45,7 +45,6 @@
             navigator.vibrate(3000);
         };
 
-        navigator.splashscreen.hide();
     };
 
     /**
